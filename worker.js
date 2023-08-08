@@ -1,5 +1,6 @@
 const amqp = require('amqplib');
-const queue = "TaskQueue";
+require('dotenv').config('./');
+const queue = process.env.BASE_QUEUE || 'TaskQueue';
 
 amqp.connect('amqp://localhost', (error, connection) => {
     if (error) {
