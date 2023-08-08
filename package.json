@@ -1,0 +1,27 @@
+{
+  "name": "job-application-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "job-application-task"
+  },
+  "keywords": [
+    "Microservices",
+    "RabbitMQ"
+  ],
+  "author": "EXP",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.4.2",
+    "node-amqp": "^1.2.1"
+  }
+}
