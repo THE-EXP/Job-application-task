@@ -1,26 +1,29 @@
-var amqp = require('amqplib/callback_api');
+var amqp = require('amqplib');
+require('dotenv').config('./');
 
-amqp.connect('amqp://localhost', function(error0, connection) {
-    if (error0) {
-        throw error0;
+const queue = process.env.BASE_QUEUE || 'TaskQueue';
+const RabbitMQURL = process.env.RMQ_URL || 'amqp://localhost';
+
+start();
+
+async function start() {
+  var connection = await amqp.connect(RabbitMQURL);
+	console.log(`Opened connection`)
+  var channel = await connection.createChannel();
+  channel.assertQueue(queue, {
+    durable: false
+  });
+	
+  console.log(` [*] Waiting for messages in ${queue} . To exit press CTRL+C`);
+  channel.consume(queue, async (msg) => {
+		channel.ack(msg);
+    if(msg.content.toString() == 'Hello, World!') {
+			console.log(`Sending message: "Hello there!"`);
+      channel.sendToQueue(queue, Buffer.from('Hello there!'));
+    } else if(msg.content.toString() == 'Hello, World! It is I The Postman!') {
+			console.log(`Sending message: "Hello there, Postman!"`);
+			channel.sendToQueue(queue, Buffer.from('Hello there, Postman!'));
     }
-    connection.createChannel(function(error1, channel) {
-        if (error1) {
-            throw error1;
-        }
-
-        var queue = 'hello';
-
-        channel.assertQueue(queue, {
-            durable: false
-        });
-
-        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
-
-        channel.consume(queue, function(msg) {
-            console.log(" [x] Received %s", msg.content.toString());
-        }, {
-            noAck: true
-        });
-    });
-});
+		console.log(`Received: ${msg.content.toString()}`);
+    }, {noAck: false, consumerTag: 'consumer'});
+}
