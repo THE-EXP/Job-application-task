@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "micro1": "node index.js",
+    "micro2": "node worker.js"
   },
   "repository": {
     "type": "git",
