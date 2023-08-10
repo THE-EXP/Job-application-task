@@ -50,10 +50,10 @@ async function getMessage(req, res){
 app.post('/add', (req, res) => {
 	sendMessage(req, res);
 	getMessage(req, res);
+	/** 
+	 * ! Crashes after 2 requests, reason unknown, Node says because i'm trying to set headers when they were already sent to the client, How?
+	 * TODO: fix this
+	 **/
 });
-
-app.get('/add', (req, res) => {
-	getMessage(req, res);
-})
 
 app.listen(mainPort, ()=>{console.log("Server started on port", mainPort);});
