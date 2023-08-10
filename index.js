@@ -6,34 +6,28 @@ app.set(express.urlencoded({extended: true}));
 
 const queue = process.env.BASE_QUEUE || 'TaskQueue';
 const mainPort = process.env.MAIN_SERVER_PORT || 8000;
+const RabbitMQURL = process.env.RMQ_URL || 'amqp://localhost';
 
-async function sendMessage(req){
-	amqp.connect('amqp://localhost', (error0, connection) => {
-		if (error0) {
-			throw error0;
-		}
-		connection.createChannel((error1, channel) => {
-			if (error1) {
-				throw error1;
-			}
-
-			channel.assertQueue(queue, {
-				durable: true
-			});
-
-			channel.sendToQueue(queue, Buffer.from(req.body.msg));
-
-		});
-		setTimeout(() => {
-			connection.close();
-			process.exit(0);
-		}, 15000);
+async function sendMessage(message){
+	var connection = await amqp.connect(RabbitMQURL, {timeout: 60000});
+	var channel = await connection.createChannel(queue);
+	channel.assertQueue(queue, {
+    durable: false
 	});
+	channel.sendToQueue(queue, Buffer.from(message));
+	channel.close();
+	connection.close();
+	return true
 }
 
 app.post('/add', async (req, res) => {
-	await sendMessage(req);
-	res.send("message sent!").status(200);
+	var done = await sendMessage(req.query.msg)
+	console.log(done);
+	if (done){
+		res.status(200).send("message sent!");
+	} else {
+		res.status(500).send('Failed to send message');
+	}
 });
 
 app.listen(mainPort, ()=>{console.log("Server started on port", mainPort);});
