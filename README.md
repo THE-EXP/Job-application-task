@@ -16,4 +16,4 @@ Bundled with the project
 - dotenv (.env)
 
 # Short Video explaination
-![Viedo explaination](Video/lv_0_20230810153640.mp4)
+[Video explaination](Video/lv_0_20230810153640.mp4)
