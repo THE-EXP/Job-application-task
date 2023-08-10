@@ -1,0 +1,77 @@
+{
+	"info": {
+		"_postman_id": "e1bee40d-bc63-4585-a5c1-e7559a000fb7",
+		"name": "Job application task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24993465"
+	},
+	"item": [
+		{
+			"name": "Add message to queue",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "msg",
+							"value": "",
+							"description": "Message to be sent to the queue",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BaseURL}}/add?msg=Hello, World!",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"add"
+					],
+					"query": [
+						{
+							"key": "msg",
+							"value": "Hello, World! It is I The Postman!",
+							"description": "Message to be sent",
+							"disabled": true
+						},
+						{
+							"key": "msg",
+							"value": "Hello, World!"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseURL",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}

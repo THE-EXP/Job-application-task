@@ -6,18 +6,18 @@ app.set(express.urlencoded({extended: true}));
 
 const queue = process.env.BASE_QUEUE || 'TaskQueue';
 const mainPort = process.env.MAIN_SERVER_PORT || 8000;
-const RabbitMQURL = process.env.RMQ_URL || 'amqp://localhost';
+const RabbitMQURL = process.env.RMQ_URL || 'amqp://localhost:5672';
 
 async function sendMessage(req, res){
 	var message = req.query.msg
 	var connection = await amqp.connect(RabbitMQURL);
 	console.log('connection opened');
 	var channel = await connection.createChannel();
-	channel.assertQueue(queue, {
+	await channel.assertQueue(queue, {
     durable: false
 	});
 	
-	console.log(`Sending message: ${message}`)
+	console.log(`Sending message: ${message}`);
 	channel.sendToQueue(queue, Buffer.from(message));
 	setTimeout(() => {
 		channel.close();
