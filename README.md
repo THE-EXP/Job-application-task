@@ -1,3 +1,6 @@
+# Synopsis
+* Rejected, "we already hired another applicant"
+
 # Job application task
  
 This Project will show the interaction of 2 microservices using RabbitMQ as the MQTT exchange
